@@ -1,6 +1,6 @@
 # Retailer
 
-git clone https://github.com/ectalactus/test-mongo-spark.git
+git clone https://github.com/ectalactus/mongo-spark.git
 
 ## Launch containers
 

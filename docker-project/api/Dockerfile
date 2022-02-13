@@ -31,13 +31,13 @@ RUN wget --no-check-certificate https://downloads.lightbend.com/scala/${SCALA_VE
 
 # API
 
-RUN git clone https://github.com/ectalactus/test-mongo-spark.git
+RUN git clone https://github.com/ectalactus/mongo-spark.git
 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
-RUN cd test-mongo-spark && git pull
+RUN cd mongo-spark && git pull
 
-RUN cd test-mongo-spark/RetailApi && pip install --user -r requirements.txt
+RUN cd mongo-spark/RetailApi && pip install --user -r requirements.txt
 
 EXPOSE 5000
 
-CMD [ "python", "/app/test-mongo-spark/RetailApi/RetailApi.py", "-mongo_host", "mongodb"]
+CMD [ "python", "/app/mongo-spark/RetailApi/RetailApi.py", "-mongo_host", "mongodb"]
