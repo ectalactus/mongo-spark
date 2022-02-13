@@ -1,0 +1,61 @@
+<div id="app" [class.cursor-process-server]="processingServer != 0">
+    <div class="top-container">
+        <div class="top-categeory">
+            <div>
+                <h1>Best Product:</h1>
+            </div>
+            <div style="font-weight: bold;" *ngIf="topProduct">
+                {{topProduct?.description}} ({{topProduct?.stockCode}})
+            </div>
+        </div>
+        <div class="top-categeory">
+            <div style="text-align: center;">
+                <h1>Best Customer:</h1>
+            </div>
+            <div style="font-weight: bold;" *ngIf="bestCustomer">
+                {{bestCustomer?.id}}
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h1>Group all transactions by invoice</h1>
+    </div>
+    <div>
+        <ag-grid-angular class="ag-theme-alpine" style="height: 300px;" [gridOptions]="gridOptionsInvoice"
+            [rowData]="invoices" [columnDefs]="coldDefInvoice" (gridReady)="gridInvoiceReadyHandler()">
+
+        </ag-grid-angular>
+    </div>
+
+    <div>
+        <h1>What is the ratio between price and quantity for each invoice?</h1>
+    </div>
+    <div>
+        <ag-grid-angular class="ag-theme-alpine" style="height: 300px;" [gridOptions]="gridOptionsPriceRatio"
+            [rowData]="invoicesAveragePrices" [columnDefs]="coldDefPriceRatio"
+            (gridReady)="gridPriceRatioReadyHandler()">
+        </ag-grid-angular>
+    </div>
+
+    <div>
+        <h1>Give a chart showing the distribution of each product for each of the available countries</h1>
+    </div>
+    <div>
+        <ag-grid-angular class="ag-theme-alpine" style="height: 300px;" [gridOptions]="gridOptionsCountryDistribution"
+            [rowData]="productCountryDistributions" [columnDefs]="coldDefCountryDistribution"
+            (gridReady)="gridCountryDistributionReadyHandler()">
+        </ag-grid-angular>
+    </div>
+
+    <div>
+        <h1>Give a chart showing the distribution of prices</h1>
+    </div>
+    <div>
+        <ag-grid-angular class="ag-theme-alpine" style="height: 300px;" [gridOptions]="gridOptionsPriceDistribution"
+            [rowData]="productPriceDistributions" [columnDefs]="coldDefPriceDistribution"
+            (gridReady)="gridPriceDistributionReadyHandler()">
+        </ag-grid-angular>
+    </div>
+
+</div>

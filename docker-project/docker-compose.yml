@@ -1,0 +1,62 @@
+version: "2"
+
+services:
+  mongodb:
+    image: mongo
+    restart: always
+    expose:
+      - 27017
+    ports:
+      - 27017:27017
+    networks:
+      - connector
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    expose:
+      - 8081
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://mongodb:27017/
+    networks:
+      - connector
+
+  scrapper:
+    build: ./scrapper/.
+    hostname: scrapper
+    container_name: scrapper
+    links:
+      - mongodb:mongodb
+    networks:
+      - connector
+
+  api:
+    build: ./api/.
+    hostname: api
+    container_name: api
+    links:
+      - mongodb:mongodb
+    expose:
+      - 5000
+    ports:
+      - 5000:5000
+    networks:
+      - connector
+  
+  front:
+    build: ./front/.
+    hostname: front
+    container_name: front
+    links:
+      - api:api
+    expose:
+      - 4200
+    ports:
+      - 4200:4200
+    networks:
+      - connector
+
+networks:
+  connector:

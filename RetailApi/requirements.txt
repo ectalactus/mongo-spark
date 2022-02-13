@@ -1,0 +1,6 @@
+flask-restful
+flask-restplus
+flask-cors
+werkzeug
+argparse
+pyspark==3.0.3

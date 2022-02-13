@@ -1,0 +1,24 @@
+$green: yellowgreen;
+
+.top-container {
+    display: flex;
+    flex-direction: row;
+    column-gap: 20px;
+    padding: 20px;
+    color: $green;
+
+    .top-categeory {
+        width: 50%;
+        text-align: center;
+        border: solid 1px grey;
+        padding-bottom: 20px;
+    }
+}
+
+#app {
+    &.cursor-process-server {
+        * {
+            cursor: wait !important;
+        }
+    }
+}
