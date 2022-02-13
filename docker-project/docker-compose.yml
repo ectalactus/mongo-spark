@@ -31,30 +31,30 @@ services:
       - mongodb:mongodb
     networks:
       - connector
-
-  api:
-    build: ./api/.
-    hostname: api
-    container_name: api
-    links:
-      - mongodb:mongodb
-    expose:
-      - 5000
-    ports:
-      - 5000:5000
-    networks:
-      - connector
   
   front:
     build: ./front/.
     hostname: front
     container_name: front
     links:
-      - api:api
+      - scrapper:scrapper
     expose:
       - 4200
     ports:
       - 4200:4200
+    networks:
+      - connector
+
+  api:
+    build: ./api/.
+    hostname: api
+    container_name: api
+    links:
+      - front:front
+    expose:
+      - 5000
+    ports:
+      - 5000:5000
     networks:
       - connector
 
