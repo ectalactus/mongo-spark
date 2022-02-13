@@ -4,7 +4,7 @@ git clone https://github.com/ectalactus/test-mongo-spark.git
 
 ## Launch containers
 
-cd test-mongo-spark/docker-project && docker-compose up -d
+cd mongo-spark/docker-project && docker-compose up -d
 
 ## Views
 
