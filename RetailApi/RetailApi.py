@@ -77,6 +77,8 @@ class AllInvoice(Resource):
     @api.marshal_with(invoice_model)
     def get(self):
         '''Group all transactions by invoice'''
+
+        df = init_spark_session()
         df_result = df.select("invoice_id", "invoice_date", "customer_id", "country", "stock_code", "description", "price", "quantity")
 
         invoice_dic = {}
@@ -111,6 +113,8 @@ class AllPriceQuantityRatioInvoice(Resource):
     @api.marshal_with(invoice_product_price_ratio_model)
     def get(self):
         '''What is the ratio between price and quantity for each invoice?'''
+
+        df = init_spark_session()
         df_result = df.select("country", "invoice_date", "invoice_id", "quantity", "customer_id", (col("quantity") * col("price")).alias("total_price")) \
             .groupBy("invoice_id", "country", "invoice_date", "customer_id") \
             .agg(F.sum("quantity"), F.sum("total_price")) \
@@ -127,6 +131,7 @@ class TopProduct(Resource):
     def get(self):
         '''Which product sold the most?'''
 
+        df = init_spark_session()
         df_result = df.groupBy('stock_code', 'description') \
             .sum("quantity").withColumnRenamed("sum(quantity)", "total_quantity") \
             .orderBy(col("total_quantity").desc()).limit(1)
@@ -143,6 +148,7 @@ class ProductPriceDistribution(Resource):
     def get(self):
         '''Give a chart showing the distribution of prices'''
 
+        df = init_spark_session()
         df_result = df.groupBy("stock_code", "description").avg("price") \
             .select(col("stock_code").alias("stockCode"), "description",  F.round(col("avg(price)"), 2).alias("averagePrice")) \
             .orderBy(col("averagePrice").desc())
@@ -153,6 +159,9 @@ class ProductPriceDistribution(Resource):
 class ProductCountryDistribution(Resource):
     @api.marshal_with(product_country_distribution_model)
     def get(self):
+        '''Give a chart showing the distribution of each product for each of the available countries'''
+        
+        df = init_spark_session()
         df_result = df.groupBy("stock_code", "description", "country").count() \
             .select(col("stock_code").alias("stockCode"), "description",  "country", "count") \
             .orderBy("stockCode", "country")
@@ -164,6 +173,8 @@ class TopProduct(Resource):
     @api.marshal_with(customer_model)
     def get(self):
         '''Which customer spent the most money?'''
+
+        df = init_spark_session()
         df_result = df.select(col("customer_id"), (col("quantity") * col("price")).alias("price")) \
             .groupBy("customer_id").sum("price").withColumnRenamed("sum(price)", "sum_customer_price") \
             .orderBy(col("sum_customer_price").desc()).limit(1)
@@ -201,7 +212,7 @@ if __name__ == '__main__':
     args = parse_argv()
     mongo_host = args.mongo_host
     mongo_port = args.mongo_port
-    df = init_spark_session()
+    init_spark_session()
 
     app = Flask(__name__)
     app.register_blueprint(api_v1)
